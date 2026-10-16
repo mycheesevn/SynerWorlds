@@ -100,6 +100,63 @@ const STRINGS = {
     en: "Confirmation email sent — check your inbox to activate your account, then come back and log in.",
   },
   loginError: { vi: "Đăng nhập thất bại", en: "Login failed" },
+  profileMenu: { vi: "Hồ sơ & Cài đặt", en: "Profile & Settings" },
+  publicProfile: { vi: "Hồ sơ công khai", en: "Public profile" },
+  settingsTitle: { vi: "👤 Hồ sơ", en: "👤 Profile" },
+  changeAvatar: { vi: "Đổi ảnh đại diện", en: "Change avatar" },
+  avatarError: {
+    vi: "Không tải được ảnh. Vui lòng thử lại.",
+    en: "Could not upload the image. Please try again.",
+  },
+  fullName: { vi: "Họ tên", en: "Full name" },
+  birthDate: { vi: "Ngày sinh", en: "Date of birth" },
+  city: { vi: "Thành phố", en: "City" },
+  country: { vi: "Quốc gia", en: "Country" },
+  usernameL: { vi: "Tên đăng nhập", en: "Username" },
+  emailL: { vi: "Email", en: "Email" },
+  saveBtn: { vi: "Lưu", en: "Save" },
+  savedOk: { vi: "Đã lưu ✓", en: "Saved ✓" },
+  saveError: {
+    vi: "Lưu thất bại. Vui lòng thử lại.",
+    en: "Could not save. Please try again.",
+  },
+  shareProfileBtn: { vi: "Chia sẻ hồ sơ", en: "Share profile" },
+  downloadCard: { vi: "Tải thẻ chia sẻ", en: "Download share card" },
+  linkCopied: { vi: "Đã sao chép liên kết ✓", en: "Link copied ✓" },
+  referralTitle: { vi: "🎁 Giới thiệu bạn bè", en: "🎁 Invite friends" },
+  referralText: {
+    vi: "Chia sẻ mã giới thiệu của bạn — mã dùng chung cho mọi game trong hệ thống SynerWorlds.",
+    en: "Share your referral code — it works across every SynerWorlds game.",
+  },
+  referralCode: { vi: "Mã giới thiệu", en: "Referral code" },
+  copyBtn: { vi: "Sao chép", en: "Copy" },
+  privacyTitle: { vi: "🔒 Quyền riêng tư", en: "🔒 Privacy" },
+  privacyPublic: { vi: "Hồ sơ công khai", en: "Public profile" },
+  privacyText: {
+    vi: "Khi bật, mọi người xem được thành tích của bạn tại trang hồ sơ và bạn xuất hiện trong tìm kiếm, bảng cao thủ và tin hoạt động. Khi tắt, trang hồ sơ chỉ hiện tên và ảnh đại diện.",
+    en: "When on, anyone can see your stats on your profile page and you appear in search, top players and the activity feed. When off, your profile page shows only your name and avatar.",
+  },
+  passwordTitle: { vi: "🔑 Đổi mật khẩu", en: "🔑 Change password" },
+  newPassword: { vi: "Mật khẩu mới", en: "New password" },
+  confirmPassword: { vi: "Nhập lại mật khẩu mới", en: "Repeat new password" },
+  changePwBtn: { vi: "Đổi mật khẩu", en: "Change password" },
+  pwMismatch: {
+    vi: "Mật khẩu nhập lại không khớp.",
+    en: "The passwords do not match.",
+  },
+  pwTooShort: {
+    vi: "Mật khẩu cần ít nhất 6 ký tự.",
+    en: "Password must be at least 6 characters.",
+  },
+  pwChanged: { vi: "Đã đổi mật khẩu ✓", en: "Password changed ✓" },
+  pwError: {
+    vi: "Đổi mật khẩu thất bại. Vui lòng thử lại.",
+    en: "Could not change the password. Please try again.",
+  },
+  settingsLoginPrompt: {
+    vi: "Bạn cần đăng nhập để xem và chỉnh sửa hồ sơ.",
+    en: "You need to log in to view and edit your profile.",
+  },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;
