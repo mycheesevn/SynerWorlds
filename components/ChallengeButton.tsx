@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 import { s, type Lang } from "@/lib/i18n";
+import HandoffLink from "@/components/HandoffLink";
 
 export interface ChallengeGame {
   slug: string;
@@ -77,7 +78,7 @@ export default function ChallengeButton({
         <span className="challenge-picker" role="menu">
           <span className="cp-title">{s("challengePick", lang)}</span>
           {sorted.map((g) => (
-            <a
+            <HandoffLink
               key={g.slug}
               href={`${g.site_url}/?challenge=${encodeURIComponent(handle)}`}
               role="menuitem"
@@ -87,7 +88,7 @@ export default function ChallengeButton({
               {g.played && g.rating ? (
                 <span className="cp-rating">⭐ {g.rating.toLocaleString()}</span>
               ) : null}
-            </a>
+            </HandoffLink>
           ))}
         </span>
       )}

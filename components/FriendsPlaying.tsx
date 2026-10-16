@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase-browser";
+import HandoffLink from "@/components/HandoffLink";
 import { s, type Lang } from "@/lib/i18n";
 
 interface FriendRoom {
@@ -117,15 +118,14 @@ export default function FriendsPlaying({ lang }: { lang: Lang }) {
                   ? s("inMatch", lang)
                   : s("waitingRoom", lang)}
               </span>
-              <a
+              <HandoffLink
                 className="btn"
                 style={{ background: f.accent ?? undefined }}
                 href={f.join_url}
-                target="_blank"
-                rel="noreferrer"
+                newTab
               >
                 {s("enterRoom", lang)}
-              </a>
+              </HandoffLink>
             </div>
           ))}
         </div>

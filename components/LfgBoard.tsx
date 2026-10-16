@@ -6,6 +6,7 @@ import { supabaseBrowser } from "@/lib/supabase-browser";
 import type { HubGame, LfgPost } from "@/lib/data";
 import { s, timeAgo, type Lang } from "@/lib/i18n";
 import { socialError } from "@/lib/social";
+import HandoffLink from "@/components/HandoffLink";
 
 const PAGE = 10;
 const HOURS = [6, 12, 24, 48];
@@ -237,13 +238,13 @@ export default function LfgBoard({
                       {s("lfgClose", lang)}
                     </button>
                   ) : (
-                    <a
+                    <HandoffLink
                       className="btn"
                       style={{ background: p.accent ?? undefined }}
                       href={`${siteBySlug.get(p.slug) ?? ""}/?challenge=${encodeURIComponent(p.author_handle)}`}
                     >
                       {s("challengeBtn", lang)}
-                    </a>
+                    </HandoffLink>
                   )}
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import type { HubRoom } from "@/lib/data";
 import { s, type Lang } from "@/lib/i18n";
+import HandoffLink from "@/components/HandoffLink";
 
 export default function RoomCard({
   room,
@@ -31,15 +32,14 @@ export default function RoomCard({
           👥 {room.member_count}/{room.max_players}
         </span>
       </div>
-      <a
+      <HandoffLink
         className="btn"
         style={{ background: room.accent ?? undefined }}
         href={room.join_url}
-        target="_blank"
-        rel="noreferrer"
+        newTab
       >
         {s("enterRoom", lang)}
-      </a>
+      </HandoffLink>
     </div>
   );
 }

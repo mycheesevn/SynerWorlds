@@ -6,6 +6,7 @@ import { fmtDate, parseLang, ratingTitle, s } from "@/lib/i18n";
 import ShareButton from "@/components/ShareButton";
 import ChallengeButton from "@/components/ChallengeButton";
 import Guestbook from "@/components/Guestbook";
+import HandoffLink from "@/components/HandoffLink";
 
 export const revalidate = 60;
 
@@ -67,14 +68,13 @@ function GameCard({ g, lang }: { g: GameStat; lang: "vi" | "en" }) {
         </div>
         {tagline && <div className="sc-detail">{tagline}</div>}
         <div className="sc-actions">
-          <a
+          <HandoffLink
             className="btn ghost"
             href={g.site_url}
-            target="_blank"
-            rel="noreferrer"
+            newTab
           >
             {s("tryNow", lang)}
-          </a>
+          </HandoffLink>
         </div>
       </div>
     );
@@ -97,15 +97,14 @@ function GameCard({ g, lang }: { g: GameStat; lang: "vi" | "en" }) {
           {s("level", lang)} {g.level} · {g.xp?.toLocaleString()} XP
         </span>
         <span className="spacer" />
-        <a
+        <HandoffLink
           className="btn"
           style={{ background: g.accent ?? undefined }}
           href={g.site_url}
-          target="_blank"
-          rel="noreferrer"
+          newTab
         >
           {s("playNow", lang)}
-        </a>
+        </HandoffLink>
       </div>
       <div className="sc-rating">
         <span className="big">{g.rating?.toLocaleString()}</span>

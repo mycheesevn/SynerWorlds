@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { parseLang, s, timeAgo, type Lang } from "@/lib/i18n";
 import RoomCard from "@/components/RoomCard";
+import HandoffLink from "@/components/HandoffLink";
 import FriendsPlaying from "@/components/FriendsPlaying";
 
 export const revalidate = 60;
@@ -137,15 +138,14 @@ export default async function HomePage({
                 <span className="gc-meta">
                   👥 {g.players.toLocaleString()} {s("players", lang)}
                 </span>
-                <a
+                <HandoffLink
                   className="btn"
                   style={{ background: g.accent ?? undefined }}
                   href={g.site_url}
-                  target="_blank"
-                  rel="noreferrer"
+                  newTab
                 >
                   {s("playNow", lang)}
-                </a>
+                </HandoffLink>
               </div>
             ))}
           </div>
@@ -323,15 +323,14 @@ function ActivityRow({
         ) : null}
       </span>
       {item.kind === "room" && item.join_url && (
-        <a
+        <HandoffLink
           className="btn"
           style={{ background: item.accent ?? undefined }}
           href={item.join_url}
-          target="_blank"
-          rel="noreferrer"
+          newTab
         >
           {s("enterRoom", lang)}
-        </a>
+        </HandoffLink>
       )}
       <span className="when">{timeAgo(item.at, lang)}</span>
     </div>
