@@ -17,15 +17,25 @@ export default function AuthBar() {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLSpanElement>(null);
 
+  const explicitSignOutRef = useRef(false);
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
   useEffect(() => {
     const sb = supabaseBrowser();
     let cancelled = false;
 
-    const load = async () => {
-      const {
-        data: { session },
-      } = await sb.auth.getSession();
+    // allowRetry: when an auth event arrives with no session, a failed
+    // token refresh can race the stored session — re-check once after
+    // 1200ms before demoting the user to signed-out.
+    const load = async (allowRetry = false) => {
+      let session = (await sb.auth.getSession()).data.session;
       if (cancelled) return;
+      if (!session && allowRetry) {
+        await sleep(1200);
+        if (cancelled) return;
+        session = (await sb.auth.getSession()).data.session;
+        if (cancelled) return;
+      }
       if (!session) {
         setMe(null);
         setReady(true);
@@ -48,10 +58,20 @@ export default function AuthBar() {
       });
       setReady(true);
     };
-    load();
+    load(false);
     const {
       data: { subscription },
-    } = sb.auth.onAuthStateChange(() => load());
+    } = sb.auth.onAuthStateChange((event, session) => {
+      // A user-initiated sign-out clears immediately — no re-verify delay.
+      if (explicitSignOutRef.current) {
+        explicitSignOutRef.current = false;
+        setMe(null);
+        setReady(true);
+        return;
+      }
+      if (session) load(false);
+      else load(true);
+    });
     return () => {
       cancelled = true;
       subscription.unsubscribe();
@@ -76,6 +96,7 @@ export default function AuthBar() {
 
   const logout = async () => {
     setOpen(false);
+    explicitSignOutRef.current = true;
     await supabaseBrowser().auth.signOut();
     setMe(null);
   };
