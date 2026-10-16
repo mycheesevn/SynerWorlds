@@ -3,6 +3,11 @@ import { getPublicProfile } from "@/lib/data";
 
 export const runtime = "edge";
 
+// Satori rules honored here: every element with more than one child
+// declares display:flex, and text is composed as single strings (no
+// nested inline elements). No emoji/symbol glyphs — Satori's dynamic
+// emoji font fails on chess glyphs (♞) and would break the render.
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ handle: string }> },
@@ -18,6 +23,14 @@ export async function GET(
     p && p.found && !p.private
       ? (p.games ?? []).filter((g) => g.played)
       : [];
+  const initial = (name || "?").charAt(0).toUpperCase();
+  const totalsLine = totals
+    ? `${totals.xp.toLocaleString()} XP   ·   ${totals.games_count} games   ·   ${totals.games_played.toLocaleString()} ván đấu${
+        totals.best_rating
+          ? `   ·   Rating cao nhất ${totals.best_rating.toLocaleString()}`
+          : ""
+      }`
+    : "Một tài khoản — mọi bàn cờ · One account, every board";
 
   return new ImageResponse(
     (
@@ -40,11 +53,12 @@ export async function GET(
               overflow: "hidden", border: "3px solid #222",
             }}
           >
-            <div style={{ flex: 1, background: "#cf3a30" }} />
-            <div style={{ flex: 1, background: "#2569b8" }} />
+            <div style={{ flex: 1, background: "#cf3a30", display: "flex" }} />
+            <div style={{ flex: 1, background: "#2569b8", display: "flex" }} />
           </div>
-          <div style={{ fontSize: 34, fontWeight: 800 }}>
-            Syner<span style={{ color: "#2569b8" }}>Worlds</span>
+          <div style={{ display: "flex", fontSize: 34, fontWeight: 800 }}>
+            <span>Syner</span>
+            <span style={{ color: "#2569b8" }}>Worlds</span>
           </div>
         </div>
 
@@ -71,31 +85,19 @@ export async function GET(
                 fontSize: 56, fontWeight: 800,
               }}
             >
-              {(name || "?").charAt(0).toUpperCase()}
+              {initial}
             </div>
           )}
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 58, fontWeight: 800, lineHeight: 1.1 }}>
+            <div style={{ display: "flex", fontSize: 58, fontWeight: 800, lineHeight: 1.1 }}>
               {name}
             </div>
-            <div style={{ fontSize: 28, color: "#61707f", marginTop: 6 }}>
+            <div style={{ display: "flex", fontSize: 28, color: "#61707f", marginTop: 6 }}>
               {hd}
             </div>
-            {totals && (
-              <div style={{ fontSize: 28, marginTop: 14, display: "flex", gap: 24 }}>
-                <span>
-                  <b>{totals.xp.toLocaleString()}</b> XP
-                </span>
-                <span>
-                  <b>{totals.games_count}</b> games
-                </span>
-                {totals.best_rating ? (
-                  <span>
-                    ⭐ <b>{totals.best_rating.toLocaleString()}</b>
-                  </span>
-                ) : null}
-              </div>
-            )}
+            <div style={{ display: "flex", fontSize: 28, marginTop: 14 }}>
+              {totalsLine}
+            </div>
           </div>
         </div>
 
@@ -108,14 +110,16 @@ export async function GET(
                   display: "flex", alignItems: "center", gap: 10,
                   background: "#ffffff", borderRadius: 14, padding: "12px 20px",
                   border: "1px solid #dde4ec", fontSize: 26,
+                  borderLeft: `6px solid ${g.accent ?? "#2569b8"}`,
                 }}
               >
-                <span>{g.icon ?? "🎲"}</span>
                 <span style={{ fontWeight: 700 }}>{g.name_vi}</span>
                 <span style={{ color: "#b8860b", fontWeight: 800 }}>
                   {g.rating?.toLocaleString()}
                 </span>
-                {g.rank ? <span style={{ color: "#61707f" }}>#{g.rank}</span> : null}
+                {g.rank ? (
+                  <span style={{ color: "#61707f" }}>{`#${g.rank}`}</span>
+                ) : null}
               </div>
             ))}
           </div>
@@ -131,6 +135,12 @@ export async function GET(
         </div>
       </div>
     ),
-    { width: 1200, height: 630 },
+    {
+      width: 1200,
+      height: 630,
+      headers: {
+        "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+      },
+    },
   );
 }

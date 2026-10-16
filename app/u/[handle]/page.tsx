@@ -79,7 +79,7 @@ function GameCard({ g, lang }: { g: GameStat; lang: "vi" | "en" }) {
   }
   const record =
     g.wins !== null && g.losses !== null && g.draws !== null
-      ? `${g.wins}–${g.draws}–${g.losses}`
+      ? `${s("record", lang)}: ${g.wins}–${g.draws}–${g.losses}`
       : g.wins !== null
         ? `${g.wins} ${lang === "vi" ? "thắng" : "wins"}`
         : "";
@@ -117,7 +117,7 @@ function GameCard({ g, lang }: { g: GameStat; lang: "vi" | "en" }) {
       </div>
       <div className="sc-detail">
         {s("peak", lang)}: {g.peak_rating?.toLocaleString()}
-        {record ? ` · ${s("record", lang)}: ${record}` : ""} ·{" "}
+        {record ? ` · ${record}` : ""} ·{" "}
         {g.games_played?.toLocaleString()} {s("games", lang)}
         {g.updated_at
           ? ` · ${s("lastPlayed", lang)}: ${fmtDate(g.updated_at, lang)}`
