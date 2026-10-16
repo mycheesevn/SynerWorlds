@@ -90,6 +90,40 @@ section > h2 { font-size: 21px; margin: 0 0 14px; }
 .btn:hover { text-decoration: none; filter: brightness(1.08); }
 .btn.ghost { background: #eef2f7; color: var(--ink); }
 
+/* ---------- room cards ---------- */
+.room-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.room-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;
+  border-top: 4px solid var(--blue);
+}
+.room-card .rc-game { display: flex; align-items: center; gap: 8px; }
+.room-card .rc-icon { font-size: 20px; }
+.room-card .rc-gname { font-weight: 700; font-size: 14px; color: var(--muted); }
+.room-card .spacer { flex: 1; }
+.room-card .rc-name { font-size: 17px; font-weight: 700; }
+.room-card .rc-meta {
+  display: flex; align-items: center; gap: 12px; color: var(--muted);
+  font-size: 14px; flex: 1;
+}
+.code-chip {
+  background: #eef2f7; border-radius: 7px; padding: 2px 8px; font-size: 13px;
+}
+.badge { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 9px; }
+.badge.live { background: #fdeceb; color: var(--red); }
+.badge.wait { background: #e8f6ec; color: #1e7d32; }
+.rooms-more { margin-top: 12px; text-align: right; font-weight: 600; }
+.game-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.game-filter a {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: 14px;
+}
+.game-filter a:hover { text-decoration: none; border-color: var(--blue); }
+.game-filter a.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+
 /* ---------- player rows ---------- */
 .player-list { display: flex; flex-direction: column; gap: 8px; }
 .player-row {

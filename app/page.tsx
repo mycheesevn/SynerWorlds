@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getHubHome, searchProfiles } from "@/lib/data";
+import { getHubHome, getPublicRooms, searchProfiles } from "@/lib/data";
 import { parseLang, s } from "@/lib/i18n";
+import RoomCard from "@/components/RoomCard";
 
 export const revalidate = 60;
 
@@ -33,9 +34,10 @@ export default async function HomePage({
   const sp = await searchParams;
   const lang = parseLang(sp.lang);
   const q = (sp.q ?? "").trim();
-  const [home, results] = await Promise.all([
+  const [home, results, rooms] = await Promise.all([
     getHubHome(),
     q ? searchProfiles(q) : Promise.resolve(null),
+    getPublicRooms(),
   ]);
   const langQ = lang === "en" ? "&lang=en" : "";
   const withLang = (href: string) =>
@@ -101,6 +103,20 @@ export default async function HomePage({
               ))}
             </div>
           )}
+        </section>
+      )}
+
+      {rooms.length > 0 && (
+        <section>
+          <h2>{s("roomsHeading", lang)}</h2>
+          <div className="room-grid">
+            {rooms.slice(0, 6).map((r) => (
+              <RoomCard key={`${r.slug}-${r.code}`} room={r} lang={lang} />
+            ))}
+          </div>
+          <div className="rooms-more">
+            <Link href={withLang("/rooms")}>{s("roomsAll", lang)}</Link>
+          </div>
         </section>
       )}
 

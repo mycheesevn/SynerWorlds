@@ -52,6 +52,22 @@ const STRINGS = {
   },
   viewProfile: { vi: "Xem hồ sơ ▸", en: "View profile ▸" },
   profileOf: { vi: "Hồ sơ kỳ thủ", en: "Player profile" },
+  roomsHeading: { vi: "🔴 Phòng chơi đang mở", en: "🔴 Open game rooms" },
+  roomsAll: { vi: "Xem tất cả phòng ▸", en: "See all rooms ▸" },
+  roomsPageTitle: { vi: "Phòng chơi công khai", en: "Public game rooms" },
+  roomsPageSub: {
+    vi: "Mọi phòng chơi công khai đang mở ở tất cả các game — bấm vào là vào thẳng phòng.",
+    en: "Every public room currently open across all games — tap to jump straight in.",
+  },
+  inMatch: { vi: "⚔️ Đang đấu", en: "⚔️ Match in progress" },
+  waitingRoom: { vi: "🟢 Đang chờ", en: "🟢 Waiting" },
+  enterRoom: { vi: "Vào phòng ▸", en: "Enter room ▸" },
+  roomsEmpty: {
+    vi: "Hiện chưa có phòng công khai nào đang mở. Hãy mở một game và tạo phòng mới nhé!",
+    en: "No public rooms are open right now. Open a game and create one!",
+  },
+  allGames: { vi: "Tất cả game", en: "All games" },
+  roomCode: { vi: "Mã phòng", en: "Room code" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

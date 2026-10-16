@@ -81,7 +81,11 @@ export interface SearchResult {
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
-async function rpc<T>(fn: string, args?: Record<string, unknown>): Promise<T | null> {
+async function rpc<T>(
+  fn: string,
+  args?: Record<string, unknown>,
+  revalidateSec = 60,
+): Promise<T | null> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
@@ -92,7 +96,7 @@ async function rpc<T>(fn: string, args?: Record<string, unknown>): Promise<T | n
         "Content-Type": "application/json",
       },
       body: JSON.stringify(args ?? {}),
-      next: { revalidate: 60 },
+      next: { revalidate: revalidateSec },
     });
     if (!res.ok) return null;
     return (await res.json()) as T;
@@ -107,6 +111,25 @@ export function getPublicProfile(handle: string): Promise<PublicProfile | null> 
 
 export function getHubHome(): Promise<HubHome | null> {
   return rpc<HubHome>("hub_home");
+}
+
+export interface HubRoom {
+  slug: string;
+  name_vi: string;
+  name_en: string;
+  icon: string | null;
+  accent: string | null;
+  code: string;
+  name: string;
+  member_count: number;
+  max_players: number;
+  has_active_match: boolean;
+  join_url: string;
+}
+
+export async function getPublicRooms(): Promise<HubRoom[]> {
+  const out = await rpc<{ rooms: HubRoom[] }>("hub_public_rooms", {}, 20);
+  return out?.rooms ?? [];
 }
 
 export async function searchProfiles(q: string): Promise<SearchResult[]> {
