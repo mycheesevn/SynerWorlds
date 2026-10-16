@@ -307,6 +307,83 @@ section > h2 { font-size: 21px; margin: 0 0 14px; }
 }
 .switch-row input { width: 22px; height: 22px; accent-color: var(--blue); cursor: pointer; }
 
+/* ---------- guestbook + challenge + LFG ---------- */
+.gb-composer, .lfg-composer {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px; margin-bottom: 14px;
+}
+.gb-composer textarea, .lfg-composer textarea {
+  width: 100%; box-sizing: border-box; padding: 10px 12px; font-size: 15px;
+  border: 1px solid var(--line); border-radius: 9px; resize: vertical;
+  font-family: inherit; color: var(--ink); background: #fff;
+}
+.gb-composer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 8px;
+}
+.gb-count { color: var(--muted); font-size: 13px; }
+.gb-list { display: flex; flex-direction: column; gap: 12px; }
+.gb-entry {
+  display: flex; gap: 12px; background: var(--card);
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+}
+.gb-entry .avatar { width: 40px; height: 40px; font-size: 17px; flex-shrink: 0; }
+.gb-main { flex: 1; min-width: 0; }
+.gb-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.gb-head .nm { font-weight: 700; color: var(--ink); }
+.gb-head .when { color: var(--muted); font-size: 13px; }
+.gb-del {
+  margin-left: auto; background: none; border: 0; color: var(--muted);
+  cursor: pointer; font-size: 14px; padding: 2px 6px;
+}
+.gb-del:hover { color: var(--red); }
+.gb-body { margin: 5px 0 8px; white-space: pre-wrap; word-break: break-word; }
+.gb-reactions { display: flex; gap: 6px; flex-wrap: wrap; }
+.gb-react {
+  background: #f2f4f8; border: 1px solid var(--line); border-radius: 999px;
+  padding: 3px 10px; font-size: 14px; cursor: pointer;
+}
+.gb-react.mine { background: #e3ecfd; border-color: var(--blue); }
+.gb-actions { margin-top: 4px; }
+.gb-actions .btn { padding: 6px 14px; font-size: 14px; }
+.pager { display: flex; align-items: center; gap: 12px; margin-top: 14px; font-weight: 600; }
+.challenge-wrap { position: relative; display: inline-block; }
+.btn.challenge-btn { background: var(--red); }
+.challenge-picker {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 50;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(20, 24, 40, 0.16); padding: 8px;
+  display: flex; flex-direction: column; min-width: 230px;
+}
+.challenge-picker .cp-title {
+  font-size: 13px; color: var(--muted); font-weight: 600; padding: 4px 10px;
+}
+.challenge-picker a {
+  padding: 9px 10px; border-radius: 8px; color: var(--ink);
+  font-weight: 600; font-size: 15px;
+}
+.challenge-picker a:hover { background: #f2f4f8; text-decoration: none; }
+.challenge-picker .cp-rating { color: var(--muted); font-size: 13px; margin-left: 6px; }
+.lfg-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.chip {
+  background: #fff; border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 14px; font-weight: 600; font-size: 14px; cursor: pointer;
+  color: var(--ink);
+}
+.chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.game-chip {
+  border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px;
+  font-size: 13px; font-weight: 600;
+}
+.lfg-composer-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.lfg-composer-row label {
+  display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px;
+}
+.lfg-composer-row select {
+  padding: 8px 10px; font-size: 15px; border: 1px solid var(--line);
+  border-radius: 9px; background: #fff; color: var(--ink);
+}
+
 .lang-switch { font-size: 14px; color: var(--muted); }
 .lang-switch a { color: var(--muted); font-weight: 600; }
 .lang-switch a.on { color: var(--ink); text-decoration: underline; }

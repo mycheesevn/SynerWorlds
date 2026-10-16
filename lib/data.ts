@@ -159,6 +159,36 @@ export async function getActivity(limit = 12): Promise<ActivityItem[]> {
   return out?.items ?? [];
 }
 
+export interface LfgPost {
+  id: string;
+  body: string;
+  created_at: string;
+  expires_at: string;
+  slug: string;
+  name_vi: string;
+  name_en: string;
+  icon: string | null;
+  accent: string | null;
+  author_handle: string;
+  author_name: string;
+  author_avatar: string | null;
+  author_rating: number | null;
+  mine: boolean;
+}
+
+export async function getLfgPosts(
+  slug: string | null = null,
+  limit = 10,
+  offset = 0,
+): Promise<{ total: number; posts: LfgPost[] }> {
+  const out = await rpc<{ total: number; posts: LfgPost[] }>(
+    "hub_lfg_list",
+    { p_slug: slug, p_limit: limit, p_offset: offset },
+    20,
+  );
+  return out ?? { total: 0, posts: [] };
+}
+
 export async function searchProfiles(q: string): Promise<SearchResult[]> {
   const out = await rpc<{ results: SearchResult[] }>("search_profiles", { p_q: q });
   return out?.results ?? [];

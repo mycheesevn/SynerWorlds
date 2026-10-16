@@ -153,6 +153,61 @@ const STRINGS = {
     vi: "Đổi mật khẩu thất bại. Vui lòng thử lại.",
     en: "Could not change the password. Please try again.",
   },
+  challengeBtn: { vi: "⚔️ Thách đấu", en: "⚔️ Challenge" },
+  challengePick: {
+    vi: "Chọn game để thách đấu:",
+    en: "Pick a game to challenge in:",
+  },
+  guestbookHeading: { vi: "📖 Sổ lưu bút", en: "📖 Guestbook" },
+  guestbookEmpty: {
+    vi: "Chưa có lời nhắn nào. Hãy là người đầu tiên!",
+    en: "No messages yet. Be the first!",
+  },
+  guestbookPlaceholder: {
+    vi: "Để lại lời nhắn…",
+    en: "Leave a message…",
+  },
+  guestbookPost: { vi: "Gửi", en: "Post" },
+  guestbookLoginCta: {
+    vi: "Đăng nhập để viết lưu bút",
+    en: "Log in to write in the guestbook",
+  },
+  needPlayError: {
+    vi: "Bạn cần chơi ít nhất 1 ván (ở bất kỳ game nào) trước khi dùng tính năng này.",
+    en: "You need to play at least one game (any game) before using this.",
+  },
+  slowDownError: {
+    vi: "Bạn gửi hơi nhanh — chờ một chút rồi thử lại.",
+    en: "You are posting too fast — wait a moment and try again.",
+  },
+  lfgHeading: { vi: "🎯 Tìm đối thủ", en: "🎯 Find an opponent" },
+  lfgSub: {
+    vi: "Đăng tin tìm đối thủ — người khác thấy tin, bấm Thách đấu là vào game gửi lời thách đấu cho bạn ngay.",
+    en: "Post that you are looking for a match — others tap Challenge to send you one in the game right away.",
+  },
+  lfgPlaceholder: {
+    vi: "Ví dụ: Tìm đối thủ Cờ Gánh tối nay, rating ~1200",
+    en: "E.g. Looking for a Co Ganh match tonight, rating ~1200",
+  },
+  lfgGameLabel: { vi: "Game", en: "Game" },
+  lfgHoursLabel: { vi: "Hiện trong", en: "Show for" },
+  lfgPostBtn: { vi: "Đăng tin", en: "Post" },
+  lfgEmpty: {
+    vi: "Chưa có tin tìm đối thủ nào. Đăng tin đầu tiên nhé!",
+    en: "No one is looking right now. Post the first one!",
+  },
+  lfgAllGames: { vi: "Tất cả game", en: "All games" },
+  lfgClose: { vi: "Đóng tin", en: "Close post" },
+  lfgCapError: {
+    vi: "Bạn đang có 2 tin còn hiệu lực — đóng bớt một tin trước khi đăng tiếp.",
+    en: "You already have 2 active posts — close one before posting again.",
+  },
+  lfgLoginCta: {
+    vi: "Đăng nhập để đăng tin tìm đối thủ",
+    en: "Log in to post",
+  },
+  lfgLatestHeading: { vi: "🎯 Đang tìm đối thủ", en: "🎯 Looking for a match" },
+  lfgViewBoard: { vi: "Xem bảng tìm đối thủ", en: "Open the board" },
   settingsLoginPrompt: {
     vi: "Bạn cần đăng nhập để xem và chỉnh sửa hồ sơ.",
     en: "You need to log in to view and edit your profile.",

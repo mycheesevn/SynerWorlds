@@ -39,6 +39,7 @@ export default function RootLayout({
           <nav className="site-nav">
             <Link href="/">Trang chủ</Link>
             <Link href="/rooms">Phòng chơi</Link>
+            <Link href="/tim-doi-thu">Tìm đối thủ</Link>
             <Link href="/#games">Trò chơi</Link>
             <Link href="/#top">Cao thủ</Link>
             <AuthBar />

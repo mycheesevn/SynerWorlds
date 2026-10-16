@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getPublicProfile, siteUrl, type GameStat } from "@/lib/data";
 import { fmtDate, parseLang, ratingTitle, s } from "@/lib/i18n";
 import ShareButton from "@/components/ShareButton";
+import ChallengeButton from "@/components/ChallengeButton";
+import Guestbook from "@/components/Guestbook";
 
 export const revalidate = 60;
 
@@ -172,6 +174,7 @@ export default async function ProfilePage({
             <Link href="/">{s("backHome", lang)}</Link>
           </div>
         </div>
+        <Guestbook handle={p.handle ?? handle} lang={lang} />
       </>
     );
   }
@@ -211,6 +214,20 @@ export default async function ProfilePage({
           copyLabel={s("copyLink", lang)}
           copiedLabel={s("copied", lang)}
         />
+        <ChallengeButton
+          handle={p.handle ?? handle}
+          games={(p.games ?? []).map((g) => ({
+            slug: g.slug,
+            name_vi: g.name_vi,
+            name_en: g.name_en,
+            icon: g.icon,
+            accent: g.accent,
+            site_url: g.site_url,
+            played: g.played,
+            rating: g.rating,
+          }))}
+          lang={lang}
+        />
       </div>
 
       <div className="totals-strip">
@@ -241,6 +258,8 @@ export default async function ProfilePage({
           <GameCard key={g.slug} g={g} lang={lang} />
         ))}
       </section>
+
+      <Guestbook handle={p.handle ?? handle} lang={lang} />
 
       <p style={{ marginTop: 22 }}>
         <Link href={`/${langSuffix}`}>{s("backHome", lang)}</Link>

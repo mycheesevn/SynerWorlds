@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   getActivity,
   getHubHome,
+  getLfgPosts,
   getPublicRooms,
   searchProfiles,
   type ActivityItem,
@@ -41,11 +42,12 @@ export default async function HomePage({
   const sp = await searchParams;
   const lang = parseLang(sp.lang);
   const q = (sp.q ?? "").trim();
-  const [home, results, rooms, activity] = await Promise.all([
+  const [home, results, rooms, activity, lfg] = await Promise.all([
     getHubHome(),
     q ? searchProfiles(q) : Promise.resolve(null),
     getPublicRooms(),
     getActivity(12),
+    getLfgPosts(null, 4, 0),
   ]);
   const langQ = lang === "en" ? "&lang=en" : "";
   const withLang = (href: string) =>
@@ -138,6 +140,42 @@ export default async function HomePage({
               <ActivityRow key={i} item={it} lang={lang} withLang={withLang} />
             ))}
           </div>
+        </section>
+      )}
+
+      {lfg.posts.length > 0 && (
+        <section>
+          <h2>{s("lfgLatestHeading", lang)}</h2>
+          <div className="feed-list">
+            {lfg.posts.map((p) => (
+              <div key={p.id} className="feed-item">
+                <span className="avatar" aria-hidden>
+                  {p.author_avatar ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={p.author_avatar} alt="" />
+                  ) : (
+                    p.author_name.charAt(0).toUpperCase()
+                  )}
+                </span>
+                <span className="txt">
+                  <Link href={withLang(`/u/${p.author_handle}`)}>
+                    {p.author_name}
+                  </Link>{" "}
+                  · {p.icon ?? "🎲"} {lang === "vi" ? p.name_vi : p.name_en}
+                  {p.author_rating
+                    ? ` · ⭐ ${p.author_rating.toLocaleString()}`
+                    : ""}{" "}
+                  — {p.body}
+                </span>
+                <span className="when">{timeAgo(p.created_at, lang)}</span>
+              </div>
+            ))}
+          </div>
+          <p style={{ marginTop: 10 }}>
+            <Link href={withLang("/tim-doi-thu")}>
+              {s("lfgViewBoard", lang)} →
+            </Link>
+          </p>
         </section>
       )}
 
