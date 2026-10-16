@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { siteUrl } from "@/lib/data";
+import AuthBar from "@/components/AuthBar";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -40,6 +41,7 @@ export default function RootLayout({
             <Link href="/rooms">Phòng chơi</Link>
             <Link href="/#games">Trò chơi</Link>
             <Link href="/#top">Cao thủ</Link>
+            <AuthBar />
           </nav>
         </header>
         <main className="page">{children}</main>

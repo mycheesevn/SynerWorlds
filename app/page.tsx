@@ -1,7 +1,14 @@
 import Link from "next/link";
-import { getHubHome, getPublicRooms, searchProfiles } from "@/lib/data";
-import { parseLang, s } from "@/lib/i18n";
+import {
+  getActivity,
+  getHubHome,
+  getPublicRooms,
+  searchProfiles,
+  type ActivityItem,
+} from "@/lib/data";
+import { parseLang, s, timeAgo, type Lang } from "@/lib/i18n";
 import RoomCard from "@/components/RoomCard";
+import FriendsPlaying from "@/components/FriendsPlaying";
 
 export const revalidate = 60;
 
@@ -34,10 +41,11 @@ export default async function HomePage({
   const sp = await searchParams;
   const lang = parseLang(sp.lang);
   const q = (sp.q ?? "").trim();
-  const [home, results, rooms] = await Promise.all([
+  const [home, results, rooms, activity] = await Promise.all([
     getHubHome(),
     q ? searchProfiles(q) : Promise.resolve(null),
     getPublicRooms(),
+    getActivity(12),
   ]);
   const langQ = lang === "en" ? "&lang=en" : "";
   const withLang = (href: string) =>
@@ -106,6 +114,8 @@ export default async function HomePage({
         </section>
       )}
 
+      <FriendsPlaying lang={lang} />
+
       {rooms.length > 0 && (
         <section>
           <h2>{s("roomsHeading", lang)}</h2>
@@ -116,6 +126,17 @@ export default async function HomePage({
           </div>
           <div className="rooms-more">
             <Link href={withLang("/rooms")}>{s("roomsAll", lang)}</Link>
+          </div>
+        </section>
+      )}
+
+      {activity.length > 0 && (
+        <section>
+          <h2>{s("activityHeading", lang)}</h2>
+          <div className="feed-list">
+            {activity.map((it, i) => (
+              <ActivityRow key={i} item={it} lang={lang} withLang={withLang} />
+            ))}
           </div>
         </section>
       )}
@@ -192,5 +213,90 @@ export default async function HomePage({
       )}
       <span hidden>{langQ}</span>
     </>
+  );
+}
+
+function ActivityRow({
+  item,
+  lang,
+  withLang,
+}: {
+  item: ActivityItem;
+  lang: Lang;
+  withLang: (href: string) => string;
+}) {
+  const gameName = lang === "vi" ? item.name_vi : item.name_en;
+  const a = (
+    <Link href={withLang(`/u/${item.a_handle}`)}>{item.a_name}</Link>
+  );
+  let text: React.ReactNode;
+  if (item.kind === "match" && item.b_handle) {
+    const b = (
+      <Link href={withLang(`/u/${item.b_handle}`)}>{item.b_name}</Link>
+    );
+    text =
+      item.result === "draw" ? (
+        <>
+          🤝 {a} {lang === "vi" ? "hòa" : "drew with"} {b} · {gameName}
+        </>
+      ) : (
+        <>
+          🏆 {a} {lang === "vi" ? "thắng" : "beat"} {b} · {gameName}
+        </>
+      );
+  } else if (item.kind === "ai") {
+    text = (
+      <>
+        ♟️ {a}{" "}
+        {item.result === "draw"
+          ? lang === "vi"
+            ? "vừa hòa máy"
+            : "just drew the computer"
+          : lang === "vi"
+            ? "vừa thắng máy"
+            : "just beat the computer"}{" "}
+        · {gameName}
+      </>
+    );
+  } else {
+    text = (
+      <>
+        🚪 {a} {lang === "vi" ? "vừa mở phòng" : "just opened a room"} ·{" "}
+        {gameName}
+      </>
+    );
+  }
+  return (
+    <div className="feed-item">
+      <span className="avatar" aria-hidden>
+        {item.a_avatar ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.a_avatar} alt="" />
+        ) : (
+          item.a_name.charAt(0).toUpperCase()
+        )}
+      </span>
+      <span className="txt">
+        {item.icon} {text}
+        {item.kind === "room" && item.room_code ? (
+          <>
+            {" "}
+            · <span className="code-chip">{item.room_code}</span>
+          </>
+        ) : null}
+      </span>
+      {item.kind === "room" && item.join_url && (
+        <a
+          className="btn"
+          style={{ background: item.accent ?? undefined }}
+          href={item.join_url}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {s("enterRoom", lang)}
+        </a>
+      )}
+      <span className="when">{timeAgo(item.at, lang)}</span>
+    </div>
   );
 }

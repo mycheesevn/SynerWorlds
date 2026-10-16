@@ -132,6 +132,33 @@ export async function getPublicRooms(): Promise<HubRoom[]> {
   return out?.rooms ?? [];
 }
 
+export interface ActivityItem {
+  kind: "match" | "ai" | "room";
+  slug: string;
+  name_vi: string;
+  name_en: string;
+  icon: string | null;
+  accent: string | null;
+  at: string;
+  a_handle: string;
+  a_name: string;
+  a_avatar: string | null;
+  b_handle: string | null;
+  b_name: string | null;
+  result: "win" | "draw" | null;
+  room_code: string | null;
+  join_url: string | null;
+}
+
+export async function getActivity(limit = 12): Promise<ActivityItem[]> {
+  const out = await rpc<{ items: ActivityItem[] }>(
+    "hub_activity",
+    { p_limit: limit },
+    30,
+  );
+  return out?.items ?? [];
+}
+
 export async function searchProfiles(q: string): Promise<SearchResult[]> {
   const out = await rpc<{ results: SearchResult[] }>("search_profiles", { p_q: q });
   return out?.results ?? [];

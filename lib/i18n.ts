@@ -68,6 +68,37 @@ const STRINGS = {
   },
   allGames: { vi: "Tất cả game", en: "All games" },
   roomCode: { vi: "Mã phòng", en: "Room code" },
+  login: { vi: "Đăng nhập", en: "Log in" },
+  logout: { vi: "Đăng xuất", en: "Log out" },
+  myProfile: { vi: "Hồ sơ của tôi", en: "My profile" },
+  friendsHeading: { vi: "👥 Bạn bè đang chơi", en: "👥 Friends playing now" },
+  friendsTeaser: {
+    vi: "Đăng nhập để thấy bạn bè của bạn đang ở phòng nào — và vào chơi cùng họ ngay.",
+    en: "Log in to see which rooms your friends are in — and jump in with them.",
+  },
+  friendsEmpty: {
+    vi: "Bạn bè bạn đang theo dõi hiện không ở phòng nào. Khi họ mở phòng hoặc vào phòng, họ sẽ hiện ở đây.",
+    en: "Nobody you follow is in a room right now. When they open or join a room, they'll show up here.",
+  },
+  activityHeading: { vi: "📡 Hoạt động mới", en: "📡 Latest activity" },
+  loginTitle: { vi: "Đăng nhập SynerWorlds", en: "Log in to SynerWorlds" },
+  loginSub: {
+    vi: "Dùng chung tài khoản với các game — một tài khoản, mọi bàn cờ.",
+    en: "Same account as the games — one account, every board.",
+  },
+  email: { vi: "Email", en: "Email" },
+  password: { vi: "Mật khẩu", en: "Password" },
+  signInBtn: { vi: "Đăng nhập", en: "Log in" },
+  signUpBtn: { vi: "Đăng ký tài khoản mới", en: "Create account" },
+  haveAccount: { vi: "Đã có tài khoản? Đăng nhập", en: "Have an account? Log in" },
+  noAccount: { vi: "Chưa có tài khoản? Đăng ký", en: "New here? Sign up" },
+  googleBtn: { vi: "Tiếp tục với Google", en: "Continue with Google" },
+  orDivider: { vi: "hoặc", en: "or" },
+  checkEmail: {
+    vi: "Đã gửi email xác nhận — hãy kiểm tra hộp thư để kích hoạt tài khoản, rồi quay lại đăng nhập.",
+    en: "Confirmation email sent — check your inbox to activate your account, then come back and log in.",
+  },
+  loginError: { vi: "Đăng nhập thất bại", en: "Login failed" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;
@@ -89,6 +120,20 @@ const BANDS: { min: number; vi: string; en: string }[] = [
 export function ratingTitle(rating: number, lang: Lang): string {
   const band = BANDS.find((b) => rating >= b.min) ?? BANDS[BANDS.length - 1];
   return lang === "vi" ? band.vi : band.en;
+}
+
+/** Relative time: "5 phút trước" / "5m ago". */
+export function timeAgo(iso: string, lang: Lang): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return "";
+  const sec = Math.max(0, Math.floor((Date.now() - then) / 1000));
+  if (sec < 60) return lang === "vi" ? "vừa xong" : "just now";
+  const min = Math.floor(sec / 60);
+  if (min < 60) return lang === "vi" ? `${min} phút trước` : `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return lang === "vi" ? `${hr} giờ trước` : `${hr}h ago`;
+  const day = Math.floor(hr / 24);
+  return lang === "vi" ? `${day} ngày trước` : `${day}d ago`;
 }
 
 export function fmtDate(iso: string | null | undefined, lang: Lang): string {
