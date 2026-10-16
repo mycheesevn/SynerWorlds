@@ -116,6 +116,75 @@ export default async function HomePage({
         </section>
       )}
 
+      {!home ? (
+        <div className="notice">
+          <span className="big-emoji">🛠️</span>
+          {s("dataPending", lang)}
+        </div>
+      ) : (
+        <section id="games">
+          <h2>{s("gamesHeading", lang)}</h2>
+          <div className="game-grid">
+            {home.games.map((g) => (
+              <div
+                key={g.slug}
+                className="game-card"
+                style={{ borderTopColor: g.accent ?? undefined }}
+              >
+                <span className="gc-icon">{g.icon ?? "🎲"}</span>
+                <h3>{lang === "vi" ? g.name_vi : g.name_en}</h3>
+                <p>{lang === "vi" ? g.tagline_vi : g.tagline_en}</p>
+                <span className="gc-meta">
+                  👥 {g.players.toLocaleString()} {s("players", lang)}
+                </span>
+                <a
+                  className="btn"
+                  style={{ background: g.accent ?? undefined }}
+                  href={g.site_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {s("playNow", lang)}
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      )}
+
+        {home && home.top_players.length > 0 && (
+          <section id="top">
+            <h2>{s("topHeading", lang)}</h2>
+            <div className="player-list">
+              {home.top_players.map((p, i) => (
+                <Link
+                  key={p.handle}
+                  className="player-row"
+                  href={withLang(`/u/${p.handle}`)}
+                >
+                  <span className="rank-num">#{i + 1}</span>
+                  <Avatar url={p.avatar_url} name={p.display_name} />
+                  <span className="who">
+                    <span className="nm">{p.display_name}</span>
+                    <br />
+                    <span className="hd">
+                      @{p.handle} · {p.games_count} {s("gamesPlayedOf", lang)}
+                      {p.best_rating
+                        ? ` · ⭐ ${p.best_rating.toLocaleString()}`
+                        : ""}
+                    </span>
+                  </span>
+                  <span className="stats">
+                    <b>{p.total_xp.toLocaleString()}</b> XP
+                    <br />
+                    {p.total_games.toLocaleString()} {s("games", lang)}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       <FriendsPlaying lang={lang} />
 
       {rooms.length > 0 && (
@@ -179,76 +248,6 @@ export default async function HomePage({
         </section>
       )}
 
-      {!home ? (
-        <div className="notice">
-          <span className="big-emoji">🛠️</span>
-          {s("dataPending", lang)}
-        </div>
-      ) : (
-        <>
-          <section id="games">
-            <h2>{s("gamesHeading", lang)}</h2>
-            <div className="game-grid">
-              {home.games.map((g) => (
-                <div
-                  key={g.slug}
-                  className="game-card"
-                  style={{ borderTopColor: g.accent ?? undefined }}
-                >
-                  <span className="gc-icon">{g.icon ?? "🎲"}</span>
-                  <h3>{lang === "vi" ? g.name_vi : g.name_en}</h3>
-                  <p>{lang === "vi" ? g.tagline_vi : g.tagline_en}</p>
-                  <span className="gc-meta">
-                    👥 {g.players.toLocaleString()} {s("players", lang)}
-                  </span>
-                  <a
-                    className="btn"
-                    style={{ background: g.accent ?? undefined }}
-                    href={g.site_url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {s("playNow", lang)}
-                  </a>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {home.top_players.length > 0 && (
-            <section id="top">
-              <h2>{s("topHeading", lang)}</h2>
-              <div className="player-list">
-                {home.top_players.map((p, i) => (
-                  <Link
-                    key={p.handle}
-                    className="player-row"
-                    href={withLang(`/u/${p.handle}`)}
-                  >
-                    <span className="rank-num">#{i + 1}</span>
-                    <Avatar url={p.avatar_url} name={p.display_name} />
-                    <span className="who">
-                      <span className="nm">{p.display_name}</span>
-                      <br />
-                      <span className="hd">
-                        @{p.handle} · {p.games_count} {s("gamesPlayedOf", lang)}
-                        {p.best_rating
-                          ? ` · ⭐ ${p.best_rating.toLocaleString()}`
-                          : ""}
-                      </span>
-                    </span>
-                    <span className="stats">
-                      <b>{p.total_xp.toLocaleString()}</b> XP
-                      <br />
-                      {p.total_games.toLocaleString()} {s("games", lang)}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
-        </>
-      )}
       <span hidden>{langQ}</span>
     </>
   );
