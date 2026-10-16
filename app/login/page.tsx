@@ -24,6 +24,15 @@ export default function LoginPage() {
     if (error) setError(`${s("loginError", lang)}: ${error.message}`);
   };
 
+  const facebook = async () => {
+    setError("");
+    const { error } = await supabaseBrowser().auth.signInWithOAuth({
+      provider: "facebook",
+      options: { redirectTo: `${window.location.origin}/` },
+    });
+    if (error) setError(`${s("loginError", lang)}: ${error.message}`);
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
@@ -72,6 +81,14 @@ export default function LoginPage() {
 
       <button type="button" className="btn google" onClick={google}>
         <b>G</b> {s("googleBtn", lang)}
+      </button>
+      <button
+        type="button"
+        className="btn google"
+        style={{ marginTop: 10 }}
+        onClick={facebook}
+      >
+        <b style={{ color: "#1877f2" }}>f</b> {s("facebookBtn", lang)}
       </button>
       <div className="or-row">
         <span>{s("orDivider", lang)}</span>

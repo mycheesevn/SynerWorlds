@@ -93,6 +93,7 @@ const STRINGS = {
   haveAccount: { vi: "Đã có tài khoản? Đăng nhập", en: "Have an account? Log in" },
   noAccount: { vi: "Chưa có tài khoản? Đăng ký", en: "New here? Sign up" },
   googleBtn: { vi: "Tiếp tục với Google", en: "Continue with Google" },
+  facebookBtn: { vi: "Tiếp tục với Facebook", en: "Continue with Facebook" },
   orDivider: { vi: "hoặc", en: "or" },
   checkEmail: {
     vi: "Đã gửi email xác nhận — hãy kiểm tra hộp thư để kích hoạt tài khoản, rồi quay lại đăng nhập.",
