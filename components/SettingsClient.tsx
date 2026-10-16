@@ -24,6 +24,11 @@ export default function SettingsClient({ lang }: { lang: Lang }) {
   const [msgOk, setMsgOk] = useState("");
   const [avatarMsg, setAvatarMsg] = useState("");
   const [privacyMsg, setPrivacyMsg] = useState("");
+  const [newHandle, setNewHandle] = useState("");
+  const [handleConfirming, setHandleConfirming] = useState(false);
+  const [handleBusy, setHandleBusy] = useState(false);
+  const [handleMsg, setHandleMsg] = useState("");
+  const [handleOk, setHandleOk] = useState("");
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
   const [pwMsg, setPwMsg] = useState("");
@@ -125,6 +130,54 @@ export default function SettingsClient({ lang }: { lang: Lang }) {
     } catch {
       /* clipboard unavailable — the code stays visible to copy manually */
     }
+  };
+
+  const HANDLE_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+  const handleNextChange = profile?.handle_changed_at
+    ? new Date(
+        new Date(profile.handle_changed_at).getTime() + 30 * 24 * 3600 * 1000,
+      )
+    : null;
+  const handleCooling =
+    !!handleNextChange && handleNextChange.getTime() > Date.now();
+
+  const handleErrorText = (message: string): string => {
+    if (message.includes("invalid handle")) return s("handleErrInvalid", lang);
+    if (message.includes("handle taken")) return s("handleErrTaken", lang);
+    if (message.includes("handle is reserved"))
+      return s("handleErrReserved", lang);
+    if (message.includes("handle change too soon"))
+      return s("handleErrSoon", lang);
+    return `${s("saveError", lang)}: ${message}`;
+  };
+
+  const submitHandle = async () => {
+    if (!profile) return;
+    const value = newHandle.trim().toLowerCase();
+    setHandleMsg("");
+    setHandleOk("");
+    if (value.length < 3 || value.length > 24 || !HANDLE_RE.test(value)) {
+      setHandleMsg(s("handleErrInvalid", lang));
+      return;
+    }
+    setHandleBusy(true);
+    const { data, error } = await supabaseBrowser().rpc("hub_set_handle", {
+      p_handle: value,
+    });
+    setHandleBusy(false);
+    if (error) {
+      setHandleMsg(handleErrorText(error.message));
+      return;
+    }
+    const out = data as { handle?: string } | null;
+    setProfile({
+      ...profile,
+      handle: out?.handle ?? value,
+      handle_changed_at: new Date().toISOString(),
+    });
+    setNewHandle("");
+    setHandleConfirming(false);
+    setHandleOk(s("handleChangedOk", lang));
   };
 
   const togglePrivacy = async (next: boolean) => {
@@ -302,6 +355,97 @@ export default function SettingsClient({ lang }: { lang: Lang }) {
           </div>
         </section>
       )}
+
+      {/* public handle */}
+      <section className="set-section">
+        <h2>{s("handleTitle", lang)}</h2>
+        <p style={{ margin: "0 0 10px" }}>
+          <b>@{profile.handle}</b>
+          {profile.handle && (
+            <>
+              {" · "}
+              <Link href={`/u/${profile.handle}`}>/u/{profile.handle}</Link>
+            </>
+          )}
+        </p>
+        {handleCooling && handleNextChange ? (
+          <p style={{ color: "var(--muted)", margin: 0 }}>
+            {s("handleCooldownNote", lang)}{" "}
+            {handleNextChange.toLocaleDateString(
+              lang === "vi" ? "vi-VN" : "en-US",
+            )}
+          </p>
+        ) : handleConfirming ? (
+          <>
+            <p style={{ margin: "0 0 8px", fontSize: 17 }}>
+              <b>@{profile.handle}</b> →{" "}
+              <b>@{newHandle.trim().toLowerCase()}</b>
+            </p>
+            <p style={{ color: "var(--muted)", margin: "0 0 4px" }}>
+              {s("handleWarn", lang).replace("{old}", profile.handle ?? "")}
+            </p>
+            <div className="btn-row">
+              <button
+                type="button"
+                className="btn"
+                disabled={handleBusy}
+                onClick={submitHandle}
+              >
+                {s("handleConfirmBtn", lang)}
+              </button>
+              <button
+                type="button"
+                className="btn ghost"
+                disabled={handleBusy}
+                onClick={() => setHandleConfirming(false)}
+              >
+                {s("handleCancelBtn", lang)}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="hub-form">
+              <label>
+                {s("handleNewLabel", lang)}
+                <input
+                  type="text"
+                  value={newHandle}
+                  maxLength={24}
+                  placeholder={profile.handle ?? ""}
+                  onChange={(e) => setNewHandle(e.target.value.toLowerCase())}
+                />
+              </label>
+            </div>
+            <p style={{ color: "var(--muted)", margin: "8px 0 0" }}>
+              {s("handleRules", lang)}
+            </p>
+            <div className="btn-row">
+              <button
+                type="button"
+                className="btn"
+                disabled={
+                  !newHandle.trim() ||
+                  newHandle.trim().toLowerCase() === profile.handle
+                }
+                onClick={() => {
+                  setHandleMsg("");
+                  setHandleOk("");
+                  setHandleConfirming(true);
+                }}
+              >
+                {s("handleChangeBtn", lang)}
+              </button>
+            </div>
+          </>
+        )}
+        {handleMsg && (
+          <p className="set-error" role="alert">
+            {handleMsg}
+          </p>
+        )}
+        {handleOk && <p className="set-ok">{handleOk}</p>}
+      </section>
 
       {/* privacy */}
       <section className="set-section">

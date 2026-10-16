@@ -16,13 +16,14 @@ export interface MyProfile {
   city: string | null;
   country: string | null;
   handle: string | null;
+  handle_changed_at: string | null;
   profile_public: boolean;
   referral_code: string | null;
   email: string | null;
 }
 
 const SELECT =
-  "id, username, full_name, birth_date, avatar_url, city, country, handle, profile_public, referral_code";
+  "id, username, full_name, birth_date, avatar_url, city, country, handle, handle_changed_at, profile_public, referral_code";
 
 export async function fetchMyProfile(): Promise<MyProfile | null> {
   const sb = supabaseBrowser();
@@ -35,8 +36,24 @@ export async function fetchMyProfile(): Promise<MyProfile | null> {
     .select(SELECT)
     .eq("id", session.user.id)
     .maybeSingle();
-  if (error || !data) return null;
-  return { ...(data as Omit<MyProfile, "email">), email: session.user.email ?? null };
+  if (!error && data) {
+    return { ...(data as Omit<MyProfile, "email">), email: session.user.email ?? null };
+  }
+  // Migration 006 (handle_changed_at) not run yet — fall back to the
+  // pre-006 column list so /settings keeps working.
+  const legacy = await sb
+    .from("profiles")
+    .select(
+      "id, username, full_name, birth_date, avatar_url, city, country, handle, profile_public, referral_code",
+    )
+    .eq("id", session.user.id)
+    .maybeSingle();
+  if (legacy.error || !legacy.data) return null;
+  return {
+    ...(legacy.data as Omit<MyProfile, "email" | "handle_changed_at">),
+    handle_changed_at: null,
+    email: session.user.email ?? null,
+  };
 }
 
 /** Update own profile fields. Returns an error message or null. */

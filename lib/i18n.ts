@@ -131,6 +131,40 @@ const STRINGS = {
   referralCode: { vi: "Mã giới thiệu", en: "Referral code" },
   copyBtn: { vi: "Sao chép", en: "Copy" },
   privacyTitle: { vi: "🔒 Quyền riêng tư", en: "🔒 Privacy" },
+  handleTitle: { vi: "🔗 Handle công khai", en: "🔗 Public handle" },
+  handleRules: {
+    vi: "3–24 ký tự: chữ thường, số và dấu '-' giữa các từ (ví dụ: cao-thu-99).",
+    en: "3–24 characters: lowercase letters, digits and '-' between words (e.g. cao-thu-99).",
+  },
+  handleChangeBtn: { vi: "Đổi handle", en: "Change handle" },
+  handleNewLabel: { vi: "Handle mới", en: "New handle" },
+  handleWarn: {
+    vi: "Link hồ sơ cũ /u/{old} sẽ ngừng hoạt động ngay khi đổi. Bạn chỉ đổi lại được sau 30 ngày.",
+    en: "Your old profile link /u/{old} stops working as soon as you change. You can change again only after 30 days.",
+  },
+  handleConfirmBtn: { vi: "Xác nhận đổi", en: "Confirm change" },
+  handleCancelBtn: { vi: "Hủy", en: "Cancel" },
+  handleChangedOk: { vi: "Đã đổi handle thành công!", en: "Handle changed!" },
+  handleCooldownNote: {
+    vi: "Bạn vừa đổi handle gần đây — lần đổi tiếp theo từ ngày",
+    en: "You changed your handle recently — next change from",
+  },
+  handleErrInvalid: {
+    vi: "Handle chưa hợp lệ — 3–24 ký tự, chỉ chữ thường, số và dấu '-' giữa các từ.",
+    en: "Invalid handle — 3–24 characters, lowercase letters, digits and single '-' between words only.",
+  },
+  handleErrTaken: {
+    vi: "Handle này đã có người dùng — hãy chọn handle khác.",
+    en: "That handle is already taken — please pick another.",
+  },
+  handleErrReserved: {
+    vi: "Handle này được dành riêng cho hệ thống — hãy chọn handle khác.",
+    en: "That handle is reserved — please pick another.",
+  },
+  handleErrSoon: {
+    vi: "Bạn đổi handle quá gần đây — hãy đợi đủ 30 ngày giữa hai lần đổi.",
+    en: "You changed your handle too recently — please wait 30 days between changes.",
+  },
   privacyPublic: { vi: "Hồ sơ công khai", en: "Public profile" },
   privacyText: {
     vi: "Khi bật, mọi người xem được thành tích của bạn tại trang hồ sơ và bạn xuất hiện trong tìm kiếm, bảng cao thủ và tin hoạt động. Khi tắt, trang hồ sơ chỉ hiện tên và ảnh đại diện.",
