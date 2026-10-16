@@ -32,9 +32,10 @@ export default function SynerLogo({
         stroke="#1d2733"
         strokeWidth="4"
       />
-      {/* worlds on the orbit — red top-right, blue bottom-left */}
-      <circle cx="51.1" cy="12.9" r="6.5" fill="#cf3a30" />
-      <circle cx="12.9" cy="51.1" r="6.5" fill="#2569b8" />
+      {/* worlds on the orbit — colors CROSSED against the hub half
+          they sit beside: blue by the red half, red by the blue half */}
+      <circle cx="51.1" cy="12.9" r="6.5" fill="#2569b8" />
+      <circle cx="12.9" cy="51.1" r="6.5" fill="#cf3a30" />
       {/* hub: red/blue split disc */}
       <path d="M32 16a16 16 0 0 1 0 32z" fill="#cf3a30" />
       <path d="M32 16a16 16 0 0 0 0 32z" fill="#2569b8" />
