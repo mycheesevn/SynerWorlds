@@ -9,6 +9,7 @@ import {
 } from "@/lib/data";
 import { parseLang, s, timeAgo, type Lang } from "@/lib/i18n";
 import RoomCard from "@/components/RoomCard";
+import SynerLogo from "@/components/SynerLogo";
 import HandoffLink from "@/components/HandoffLink";
 import FriendsPlaying from "@/components/FriendsPlaying";
 
@@ -69,6 +70,9 @@ export default async function HomePage({
       </div>
 
       <div className="hero">
+        <div className="hero-logo" aria-hidden>
+          <SynerLogo size={88} />
+        </div>
         <h1>
           Syner<em>Worlds</em>
         </h1>

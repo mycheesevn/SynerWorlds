@@ -32,12 +32,7 @@ a:hover { text-decoration: underline; }
 }
 .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
 .brand:hover { text-decoration: none; }
-.brand-mark {
-  width: 34px; height: 34px; border-radius: 50%; overflow: hidden;
-  display: inline-flex; border: 2px solid #222; flex: none;
-}
-.brand-mark .bm-red { flex: 1; background: var(--red); }
-.brand-mark .bm-blue { flex: 1; background: var(--blue); }
+.hero-logo { display: flex; justify-content: center; margin-bottom: 12px; }
 .brand-name { font-size: 22px; font-weight: 800; letter-spacing: 0.2px; }
 .brand-name em { font-style: normal; color: var(--blue); }
 .site-nav { display: flex; gap: 18px; font-weight: 600; }

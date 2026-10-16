@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { siteUrl } from "@/lib/data";
 import AuthBar from "@/components/AuthBar";
+import SynerLogo from "@/components/SynerLogo";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
     siteName: "SynerWorlds",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({
@@ -28,10 +36,7 @@ export default function RootLayout({
       <body>
         <header className="site-header">
           <Link href="/" className="brand" aria-label="SynerWorlds">
-            <span className="brand-mark" aria-hidden>
-              <span className="bm-red" />
-              <span className="bm-blue" />
-            </span>
+            <SynerLogo size={38} />
             <span className="brand-name">
               Syner<em>Worlds</em>
             </span>
