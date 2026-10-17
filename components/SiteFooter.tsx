@@ -32,10 +32,10 @@ const T = {
 const FOOTER_GAMES: { vi: string; en: string; url: string }[] = [
   { vi: "Cờ vua", en: "Chess", url: "https://chess.synerworlds.com" },
   { vi: "cờ tướng", en: "Xiangqi", url: "https://cotuong.synerworlds.com" },
-  { vi: "cờ chiếu tướng", en: "Vietnamese General Check", url: "https://cochieutuong-my-cheese-vn.vercel.app" },
-  { vi: "cờ gánh", en: "Co Ganh", url: "https://coganh-my-cheese-vn.vercel.app" },
-  { vi: "cờ nhào", en: "Co Nhao", url: "https://conhao-my-cheese-vn.vercel.app" },
-  { vi: "ô ăn quan", en: "O An Quan", url: "https://oanquan-my-cheese-vn.vercel.app" },
+  { vi: "cờ chiếu tướng", en: "Vietnamese General Check", url: "https://cochieutuong.synerworlds.com" },
+  { vi: "cờ gánh", en: "Co Ganh", url: "https://coganh.synerworlds.com" },
+  { vi: "cờ nhào", en: "Co Nhao", url: "https://conhao.synerworlds.com" },
+  { vi: "ô ăn quan", en: "O An Quan", url: "https://oanquan.synerworlds.com" },
 ];
 
 export default function SiteFooter() {
