@@ -115,11 +115,11 @@ const SECTIONS: Section[] = [
     h: { vi: "7. Cách xóa dữ liệu của bạn", en: "7. How to delete your data" },
     body: {
       vi: [
-        "Để xóa tài khoản và toàn bộ dữ liệu liên quan (hồ sơ, kết quả và thống kê game, bạn bè, lưu bút, bài đăng, đăng ký thông báo đẩy), hãy gửi yêu cầu qua biểu mẫu liên hệ ở mục 9 — chọn chủ đề \"Yêu cầu xóa dữ liệu\" và ghi rõ địa chỉ email của tài khoản cần xóa. Chúng tôi xử lý trong vòng 30 ngày và xác nhận lại khi hoàn tất. Một số số liệu thống kê tổng hợp đã ẩn danh (ví dụ tổng số ván của toàn hệ thống) có thể được giữ lại vì không còn gắn với cá nhân bạn.",
+        "Để xóa tài khoản và toàn bộ dữ liệu liên quan (hồ sơ, kết quả và thống kê game, bạn bè, lưu bút, bài đăng, đăng ký thông báo đẩy), hãy đăng nhập bằng chính tài khoản cần xóa rồi gửi yêu cầu qua biểu mẫu liên hệ ở mục 9 — chọn chủ đề \"Yêu cầu xóa dữ liệu\". Chúng tôi xử lý trong vòng 30 ngày và xác nhận lại khi hoàn tất. Một số số liệu thống kê tổng hợp đã ẩn danh (ví dụ tổng số ván của toàn hệ thống) có thể được giữ lại vì không còn gắn với cá nhân bạn.",
         "Nếu bạn đăng nhập bằng Facebook, bạn cũng có thể gỡ SynerWorlds khỏi tài khoản Facebook của mình (Cài đặt Facebook → Ứng dụng và trang web) để dừng mọi chia sẻ dữ liệu trong tương lai; việc gỡ này không tự xóa dữ liệu đã lưu ở phía chúng tôi — hãy gửi biểu mẫu như trên nếu muốn xóa hẳn.",
       ],
       en: [
-        "To delete your account and all related data (profile, game results and statistics, friends, guestbook entries, posts, push subscriptions), send a request through the contact form in section 9 — choose the \"Data deletion request\" topic and state the email address of the account to delete. We complete deletion within 30 days and confirm when done. Some already-anonymized aggregate statistics (for example total games played across the whole system) may be retained, as they no longer identify you.",
+        "To delete your account and all related data (profile, game results and statistics, friends, guestbook entries, posts, push subscriptions), sign in with the account to delete and send a request through the contact form in section 9 — choose the \"Data deletion request\" topic. We complete deletion within 30 days and confirm when done. Some already-anonymized aggregate statistics (for example total games played across the whole system) may be retained, as they no longer identify you.",
         "If you sign in with Facebook, you can also remove SynerWorlds from your Facebook account (Facebook Settings → Apps and Websites) to stop any future data sharing; removal there does not by itself erase data stored with us — send the form above for full deletion.",
       ],
     },

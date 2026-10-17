@@ -1,30 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import type { Lang } from "@/lib/i18n";
 
 /**
- * Contact form — posts to /api/contact, which emails the site owner
- * server-side (the owner's address never appears on any page).
+ * Contact form — LOGIN REQUIRED (anti-bot): only verified account
+ * holders can send; the API route re-checks the access token
+ * server-side and uses the account's verified email as reply-to.
+ * Posts to /api/contact, which emails the site owner server-side
+ * (the owner's address never appears on any page).
  * Every failure state renders a visible message; nothing is swallowed.
  */
 
 const L = {
   name: { vi: "Tên của bạn", en: "Your name" },
-  email: { vi: "Email của bạn", en: "Your email" },
   topic: { vi: "Chủ đề", en: "Topic" },
   message: { vi: "Nội dung", en: "Message" },
+  replyTo: {
+    vi: "Phản hồi sẽ được gửi tới email tài khoản của bạn:",
+    en: "Replies will go to your account email:",
+  },
   send: { vi: "Gửi liên hệ", en: "Send message" },
   sending: { vi: "Đang gửi…", en: "Sending…" },
   sentTitle: { vi: "Đã gửi! 🎉", en: "Sent! 🎉" },
   sentBody: {
-    vi: "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi vào email của bạn trong thời gian sớm nhất.",
-    en: "Thanks for reaching out. We'll reply to your email as soon as we can.",
+    vi: "Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi vào email tài khoản của bạn trong thời gian sớm nhất.",
+    en: "Thanks for reaching out. We'll reply to your account email as soon as we can.",
   },
   sendAnother: { vi: "Gửi tin nhắn khác", en: "Send another message" },
+  gateTitle: {
+    vi: "Bạn cần đăng nhập để gửi liên hệ 🔐",
+    en: "Please sign in to send a message 🔐",
+  },
+  gateBody: {
+    vi: "Để chống thư rác và tin nhắn tự động, biểu mẫu liên hệ chỉ dành cho người chơi đã đăng nhập. Đăng nhập xong bạn quay lại trang này là gửi được ngay — tài khoản SynerWorlds dùng chung cho mọi game.",
+    en: "To stop spam and automated messages, the contact form is only available to signed-in players. Sign in, come back to this page, and you can send right away — your SynerWorlds account works across every game.",
+  },
+  gateBtn: { vi: "Đăng nhập", en: "Sign in" },
+  checking: { vi: "Đang kiểm tra đăng nhập…", en: "Checking your sign-in…" },
   errMissing: {
-    vi: "Vui lòng điền tên, email hợp lệ và nội dung (ít nhất 10 ký tự).",
-    en: "Please fill in your name, a valid email, and a message (at least 10 characters).",
+    vi: "Vui lòng điền tên và nội dung (ít nhất 10 ký tự).",
+    en: "Please fill in your name and a message (at least 10 characters).",
+  },
+  errAuth: {
+    vi: "Phiên đăng nhập đã hết hạn — vui lòng đăng nhập lại rồi gửi tiếp.",
+    en: "Your session has expired — please sign in again and resend.",
   },
   errRate: {
     vi: "Bạn đã gửi quá nhiều tin nhắn trong thời gian ngắn — vui lòng thử lại sau.",
@@ -74,61 +96,143 @@ const labelStyle: React.CSSProperties = {
   fontSize: 14,
 };
 
+type Phase = "checking" | "gate" | "ready" | "sent";
+
 export default function ContactForm({ lang }: { lang: Lang }) {
-  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+  const [phase, setPhase] = useState<Phase>("checking");
+  const [accountEmail, setAccountEmail] = useState("");
+  const [defaultName, setDefaultName] = useState("");
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const sb = supabaseBrowser();
+      const { data } = await sb.auth.getSession();
+      if (!alive) return;
+      const user = data.session?.user;
+      if (!user) {
+        setPhase("gate");
+        return;
+      }
+      setAccountEmail(user.email ?? "");
+      const meta = (user.user_metadata ?? {}) as { full_name?: string };
+      setDefaultName(meta.full_name ?? "");
+      setPhase("ready");
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (state === "sending") return;
+    if (sending) return;
     const form = e.currentTarget;
     const fd = new FormData(form);
     const payload = {
       name: String(fd.get("name") ?? ""),
-      email: String(fd.get("email") ?? ""),
       topic: String(fd.get("topic") ?? "general"),
       message: String(fd.get("message") ?? ""),
       website: String(fd.get("website") ?? ""), // honeypot
     };
-    if (
-      !payload.name.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(payload.email.trim()) ||
-      payload.message.trim().length < 10
-    ) {
+    if (!payload.name.trim() || payload.message.trim().length < 10) {
       setError(L.errMissing[lang]);
       return;
     }
+    const sb = supabaseBrowser();
+    const { data } = await sb.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) {
+      setError(L.errAuth[lang]);
+      setPhase("gate");
+      return;
+    }
     setError(null);
-    setState("sending");
+    setSending(true);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        setState("sent");
+        setPhase("sent");
         form.reset();
+        setSending(false);
         return;
       }
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
-      setError(
-        data.error === "rate_limited"
-          ? L.errRate[lang]
-          : data.error === "not_configured"
-            ? L.errConfig[lang]
-            : data.error === "missing_fields" || data.error === "bad_email"
-              ? L.errMissing[lang]
-              : L.errSend[lang],
-      );
-      setState("idle");
+      const d = (await res.json().catch(() => ({}))) as { error?: string };
+      if (d.error === "auth_required") {
+        setError(L.errAuth[lang]);
+        setPhase("gate");
+      } else {
+        setError(
+          d.error === "rate_limited"
+            ? L.errRate[lang]
+            : d.error === "not_configured"
+              ? L.errConfig[lang]
+              : d.error === "missing_fields" || d.error === "bad_topic"
+                ? L.errMissing[lang]
+                : L.errSend[lang],
+        );
+      }
+      setSending(false);
     } catch {
       setError(L.errSend[lang]);
-      setState("idle");
+      setSending(false);
     }
   }
 
-  if (state === "sent") {
+  if (phase === "checking") {
+    return <p style={{ color: "var(--muted)" }}>{L.checking[lang]}</p>;
+  }
+
+  if (phase === "gate") {
+    return (
+      <div
+        style={{
+          border: "1px solid var(--border, #d4d9e0)",
+          borderRadius: 12,
+          padding: "22px 20px",
+          textAlign: "center",
+        }}
+      >
+        <p style={{ fontSize: 19, fontWeight: 700, margin: "0 0 8px" }}>
+          {L.gateTitle[lang]}
+        </p>
+        <p style={{ color: "var(--muted)", margin: "0 0 18px", lineHeight: 1.6 }}>
+          {L.gateBody[lang]}
+        </p>
+        {error ? (
+          <p role="alert" style={{ color: "#8f1d16", margin: "0 0 14px" }}>
+            ⚠️ {error}
+          </p>
+        ) : null}
+        <Link
+          href="/login"
+          style={{
+            display: "inline-block",
+            padding: "12px 26px",
+            borderRadius: 10,
+            background: "var(--blue, #2569b8)",
+            color: "#fff",
+            fontSize: 16,
+            fontWeight: 700,
+            textDecoration: "none",
+          }}
+        >
+          {L.gateBtn[lang]}
+        </Link>
+      </div>
+    );
+  }
+
+  if (phase === "sent") {
     return (
       <div
         style={{
@@ -146,7 +250,7 @@ export default function ContactForm({ lang }: { lang: Lang }) {
         </p>
         <button
           type="button"
-          onClick={() => setState("idle")}
+          onClick={() => setPhase("ready")}
           style={{
             padding: "10px 18px",
             borderRadius: 8,
@@ -165,15 +269,22 @@ export default function ContactForm({ lang }: { lang: Lang }) {
 
   return (
     <form onSubmit={onSubmit} noValidate>
+      <p style={{ color: "var(--muted)", margin: "4px 0 0", lineHeight: 1.6 }}>
+        {L.replyTo[lang]} <strong style={{ color: "inherit" }}>{accountEmail}</strong>
+      </p>
+
       <label style={labelStyle} htmlFor="cf-name">
         {L.name[lang]}
       </label>
-      <input id="cf-name" name="name" required maxLength={80} style={inputStyle} autoComplete="name" />
-
-      <label style={labelStyle} htmlFor="cf-email">
-        {L.email[lang]}
-      </label>
-      <input id="cf-email" name="email" type="email" required maxLength={120} style={inputStyle} autoComplete="email" />
+      <input
+        id="cf-name"
+        name="name"
+        required
+        maxLength={80}
+        style={inputStyle}
+        autoComplete="name"
+        defaultValue={defaultName}
+      />
 
       <label style={labelStyle} htmlFor="cf-topic">
         {L.topic[lang]}
@@ -189,7 +300,15 @@ export default function ContactForm({ lang }: { lang: Lang }) {
       <label style={labelStyle} htmlFor="cf-message">
         {L.message[lang]}
       </label>
-      <textarea id="cf-message" name="message" required minLength={10} maxLength={4000} rows={6} style={{ ...inputStyle, resize: "vertical" }} />
+      <textarea
+        id="cf-message"
+        name="message"
+        required
+        minLength={10}
+        maxLength={4000}
+        rows={6}
+        style={{ ...inputStyle, resize: "vertical" }}
+      />
 
       {/* honeypot — invisible to humans, filled by bots */}
       <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }} aria-hidden="true">
@@ -217,7 +336,7 @@ export default function ContactForm({ lang }: { lang: Lang }) {
 
       <button
         type="submit"
-        disabled={state === "sending"}
+        disabled={sending}
         style={{
           marginTop: 20,
           padding: "12px 26px",
@@ -227,11 +346,11 @@ export default function ContactForm({ lang }: { lang: Lang }) {
           color: "#fff",
           fontSize: 16,
           fontWeight: 700,
-          cursor: state === "sending" ? "wait" : "pointer",
-          opacity: state === "sending" ? 0.7 : 1,
+          cursor: sending ? "wait" : "pointer",
+          opacity: sending ? 0.7 : 1,
         }}
       >
-        {state === "sending" ? L.sending[lang] : L.send[lang]}
+        {sending ? L.sending[lang] : L.send[lang]}
       </button>
     </form>
   );

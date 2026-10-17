@@ -225,6 +225,6 @@ export async function getSitemapHandles(): Promise<string[]> {
 export function siteUrl(): string {
   return (
     process.env.NEXT_PUBLIC_SITE_URL ??
-    "https://synerworlds-my-cheese-vn.vercel.app"
+    "https://synerworlds.com"
   );
 }
