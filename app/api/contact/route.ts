@@ -100,10 +100,7 @@ export async function POST(req: Request) {
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
     console.error("resend send failed", res.status, detail.slice(0, 500));
-    return NextResponse.json(
-      { error: "send_failed", detail: detail.slice(0, 300) },
-      { status: 502 },
-    );
+    return NextResponse.json({ error: "send_failed" }, { status: 502 });
   }
   return NextResponse.json({ ok: true });
 }
