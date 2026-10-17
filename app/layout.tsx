@@ -5,6 +5,7 @@ import { siteUrl } from "@/lib/data";
 import AuthBar from "@/components/AuthBar";
 import SynerLogo from "@/components/SynerLogo";
 import SiteFooter from "@/components/SiteFooter";
+import SsoRedeem from "@/components/SsoRedeem";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -50,6 +51,7 @@ export default function RootLayout({
         </header>
         <main className="page">{children}</main>
         <SiteFooter />
+        <SsoRedeem />
       </body>
     </html>
   );
