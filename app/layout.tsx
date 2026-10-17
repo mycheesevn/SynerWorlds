@@ -59,6 +59,7 @@ export default function RootLayout({
             · <a href="https://coganh-my-cheese-vn.vercel.app">Cờ Gánh</a>
             {" "}· <Link href="/privacy">Chính sách bảo mật</Link>
             {" "}· <Link href="/terms">Điều khoản sử dụng</Link>
+            {" "}· <Link href="/contact">Liên hệ</Link>
           </p>
         </footer>
       </body>

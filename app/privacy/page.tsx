@@ -11,7 +11,6 @@ import { parseLang, type Lang } from "@/lib/i18n";
  */
 
 const UPDATED = { vi: "17 tháng 10, 2026", en: "October 17, 2026" };
-const CONTACT_EMAIL = "kennybvn@gmail.com";
 
 type Section = {
   id?: string;
@@ -116,12 +115,12 @@ const SECTIONS: Section[] = [
     h: { vi: "7. Cách xóa dữ liệu của bạn", en: "7. How to delete your data" },
     body: {
       vi: [
-        "Để xóa tài khoản và toàn bộ dữ liệu liên quan (hồ sơ, kết quả và thống kê game, bạn bè, lưu bút, bài đăng, đăng ký thông báo đẩy), hãy gửi email tới địa chỉ ở mục Liên hệ từ chính địa chỉ email của tài khoản. Chúng tôi xử lý trong vòng 30 ngày và xác nhận lại bằng email khi hoàn tất. Một số số liệu thống kê tổng hợp đã ẩn danh (ví dụ tổng số ván của toàn hệ thống) có thể được giữ lại vì không còn gắn với cá nhân bạn.",
-        "Nếu bạn đăng nhập bằng Facebook, bạn cũng có thể gỡ SynerWorlds khỏi tài khoản Facebook của mình (Cài đặt Facebook → Ứng dụng và trang web) để dừng mọi chia sẻ dữ liệu trong tương lai; việc gỡ này không tự xóa dữ liệu đã lưu ở phía chúng tôi — hãy gửi email như trên nếu muốn xóa hẳn.",
+        "Để xóa tài khoản và toàn bộ dữ liệu liên quan (hồ sơ, kết quả và thống kê game, bạn bè, lưu bút, bài đăng, đăng ký thông báo đẩy), hãy gửi yêu cầu qua biểu mẫu liên hệ ở mục 9 — chọn chủ đề \"Yêu cầu xóa dữ liệu\" và ghi rõ địa chỉ email của tài khoản cần xóa. Chúng tôi xử lý trong vòng 30 ngày và xác nhận lại khi hoàn tất. Một số số liệu thống kê tổng hợp đã ẩn danh (ví dụ tổng số ván của toàn hệ thống) có thể được giữ lại vì không còn gắn với cá nhân bạn.",
+        "Nếu bạn đăng nhập bằng Facebook, bạn cũng có thể gỡ SynerWorlds khỏi tài khoản Facebook của mình (Cài đặt Facebook → Ứng dụng và trang web) để dừng mọi chia sẻ dữ liệu trong tương lai; việc gỡ này không tự xóa dữ liệu đã lưu ở phía chúng tôi — hãy gửi biểu mẫu như trên nếu muốn xóa hẳn.",
       ],
       en: [
-        "To delete your account and all related data (profile, game results and statistics, friends, guestbook entries, posts, push subscriptions), email the contact address below from the email address of your account. We complete deletion within 30 days and confirm by email. Some already-anonymized aggregate statistics (for example total games played across the whole system) may be retained, as they no longer identify you.",
-        "If you sign in with Facebook, you can also remove SynerWorlds from your Facebook account (Facebook Settings → Apps and Websites) to stop any future data sharing; removal there does not by itself erase data stored with us — send the email above for full deletion.",
+        "To delete your account and all related data (profile, game results and statistics, friends, guestbook entries, posts, push subscriptions), send a request through the contact form in section 9 — choose the \"Data deletion request\" topic and state the email address of the account to delete. We complete deletion within 30 days and confirm when done. Some already-anonymized aggregate statistics (for example total games played across the whole system) may be retained, as they no longer identify you.",
+        "If you sign in with Facebook, you can also remove SynerWorlds from your Facebook account (Facebook Settings → Apps and Websites) to stop any future data sharing; removal there does not by itself erase data stored with us — send the form above for full deletion.",
       ],
     },
   },
@@ -140,10 +139,10 @@ const SECTIONS: Section[] = [
     h: { vi: "9. Thay đổi và liên hệ", en: "9. Changes and contact" },
     body: {
       vi: [
-        "Khi chính sách này thay đổi, bản mới sẽ được đăng tại chính trang này kèm ngày cập nhật. Đơn vị vận hành: SynerWork Inc. Mọi câu hỏi về bảo mật và dữ liệu, vui lòng liên hệ:",
+        "Khi chính sách này thay đổi, bản mới sẽ được đăng tại chính trang này kèm ngày cập nhật. Đơn vị vận hành: SynerWork Inc. Mọi câu hỏi về bảo mật và dữ liệu, vui lòng liên hệ qua biểu mẫu (địa chỉ email của chúng tôi không đăng công khai để tránh thư rác):",
       ],
       en: [
-        "When this policy changes, the new version will be posted on this very page with its update date. Operated by SynerWork Inc. For any privacy or data question, contact:",
+        "When this policy changes, the new version will be posted on this very page with its update date. Operated by SynerWork Inc. For any privacy or data question, reach us through the contact form (our email address is not published, to avoid spam):",
       ],
     },
   },
@@ -203,7 +202,9 @@ export default async function PrivacyPage({
           ) : null}
           {sec.id === undefined && sec.h.en.startsWith("9.") ? (
             <p style={{ lineHeight: 1.65 }}>
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              <Link href={lang === "en" ? "/contact?lang=en" : "/contact"}>
+                {lang === "vi" ? "→ Mở biểu mẫu liên hệ" : "→ Open the contact form"}
+              </Link>
             </p>
           ) : null}
         </section>

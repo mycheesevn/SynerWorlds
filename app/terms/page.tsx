@@ -10,7 +10,6 @@ import { parseLang, type Lang } from "@/lib/i18n";
  */
 
 const UPDATED = { vi: "17 tháng 10, 2026", en: "October 17, 2026" };
-const CONTACT_EMAIL = "kennybvn@gmail.com";
 
 type Section = {
   id?: string;
@@ -144,10 +143,10 @@ const SECTIONS: Section[] = [
     h: { vi: "9. Thay đổi điều khoản và liên hệ", en: "9. Changes and contact" },
     body: {
       vi: [
-        "Khi điều khoản thay đổi, bản mới sẽ được đăng tại chính trang này kèm ngày cập nhật; việc bạn tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận bản mới. Mọi câu hỏi về điều khoản, vui lòng liên hệ đơn vị vận hành — SynerWork Inc. — qua email:",
+        "Khi điều khoản thay đổi, bản mới sẽ được đăng tại chính trang này kèm ngày cập nhật; việc bạn tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận bản mới. Mọi câu hỏi về điều khoản, vui lòng liên hệ đơn vị vận hành — SynerWork Inc. — qua biểu mẫu liên hệ (địa chỉ email của chúng tôi không đăng công khai để tránh thư rác):",
       ],
       en: [
-        "When these terms change, the new version will be posted on this very page with its update date; continuing to use the service means accepting the new version. For any question about these terms, contact the operator — SynerWork Inc. — at:",
+        "When these terms change, the new version will be posted on this very page with its update date; continuing to use the service means accepting the new version. For any question about these terms, contact the operator — SynerWork Inc. — through the contact form (our email address is not published, to avoid spam):",
       ],
     },
   },
@@ -207,7 +206,9 @@ export default async function TermsPage({
           ) : null}
           {sec.h.en.startsWith("9.") ? (
             <p style={{ lineHeight: 1.65 }}>
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              <Link href={lang === "en" ? "/contact?lang=en" : "/contact"}>
+                {lang === "vi" ? "→ Mở biểu mẫu liên hệ" : "→ Open the contact form"}
+              </Link>
               {" · "}
               <Link href={lang === "en" ? "/privacy?lang=en" : "/privacy"}>
                 {lang === "vi" ? "Chính sách bảo mật" : "Privacy Policy"}
