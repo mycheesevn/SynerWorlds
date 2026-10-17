@@ -5,7 +5,7 @@
  * Any failure returns the plain target URL — the player just signs in
  * manually in the game, exactly as before.
  */
-const HANDOFF_ENDPOINT = "https://pacclone.vercel.app/api/handoff";
+const HANDOFF_ENDPOINT = "https://cotuong.synerworlds.com/api/handoff";
 
 export async function handoffUrl(
   targetUrl: string,

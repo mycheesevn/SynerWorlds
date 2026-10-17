@@ -30,8 +30,8 @@ const T = {
  *  links into the game (HandoffLink carries the login for signed-in
  *  players, exactly like the game cards). URLs = game_registry. */
 const FOOTER_GAMES: { vi: string; en: string; url: string }[] = [
-  { vi: "Cờ vua", en: "Chess", url: "https://chess-my-cheese-vn.vercel.app" },
-  { vi: "cờ tướng", en: "Xiangqi", url: "https://pacclone.vercel.app" },
+  { vi: "Cờ vua", en: "Chess", url: "https://chess.synerworlds.com" },
+  { vi: "cờ tướng", en: "Xiangqi", url: "https://cotuong.synerworlds.com" },
   { vi: "cờ chiếu tướng", en: "Vietnamese General Check", url: "https://cochieutuong-my-cheese-vn.vercel.app" },
   { vi: "cờ gánh", en: "Co Ganh", url: "https://coganh-my-cheese-vn.vercel.app" },
   { vi: "cờ nhào", en: "Co Nhao", url: "https://conhao-my-cheese-vn.vercel.app" },
