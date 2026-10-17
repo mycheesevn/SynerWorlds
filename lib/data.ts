@@ -4,6 +4,8 @@
 // Every call fails soft (null) so pages render a graceful state
 // even before the migration has run.
 
+import { canonicalGameSiteUrl, canonicalJoinUrl } from "./gameUrls";
+
 export interface GameStat {
   slug: string;
   name_vi: string;
@@ -105,12 +107,30 @@ async function rpc<T>(
   }
 }
 
-export function getPublicProfile(handle: string): Promise<PublicProfile | null> {
-  return rpc<PublicProfile>("get_public_profile", { p_handle: handle });
+export async function getPublicProfile(
+  handle: string,
+): Promise<PublicProfile | null> {
+  const out = await rpc<PublicProfile>("get_public_profile", {
+    p_handle: handle,
+  });
+  if (out?.games) {
+    out.games = out.games.map((g) => ({
+      ...g,
+      site_url: canonicalGameSiteUrl(g.slug, g.site_url),
+    }));
+  }
+  return out;
 }
 
-export function getHubHome(): Promise<HubHome | null> {
-  return rpc<HubHome>("hub_home");
+export async function getHubHome(): Promise<HubHome | null> {
+  const out = await rpc<HubHome>("hub_home");
+  if (out?.games) {
+    out.games = out.games.map((g) => ({
+      ...g,
+      site_url: canonicalGameSiteUrl(g.slug, g.site_url),
+    }));
+  }
+  return out;
 }
 
 export interface HubRoom {
@@ -129,7 +149,10 @@ export interface HubRoom {
 
 export async function getPublicRooms(): Promise<HubRoom[]> {
   const out = await rpc<{ rooms: HubRoom[] }>("hub_public_rooms", {}, 20);
-  return out?.rooms ?? [];
+  return (out?.rooms ?? []).map((r) => ({
+    ...r,
+    join_url: canonicalJoinUrl(r.slug, r.join_url),
+  }));
 }
 
 export interface ActivityItem {
@@ -156,7 +179,11 @@ export async function getActivity(limit = 12): Promise<ActivityItem[]> {
     { p_limit: limit },
     30,
   );
-  return out?.items ?? [];
+  return (out?.items ?? []).map((i) =>
+    i.join_url
+      ? { ...i, join_url: canonicalJoinUrl(i.slug, i.join_url) }
+      : i,
+  );
 }
 
 export interface LfgPost {

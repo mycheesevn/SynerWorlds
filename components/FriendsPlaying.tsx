@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase-browser";
+import { canonicalJoinUrl } from "@/lib/gameUrls";
 import HandoffLink from "@/components/HandoffLink";
 import { s, type Lang } from "@/lib/i18n";
 
@@ -121,7 +122,7 @@ export default function FriendsPlaying({ lang }: { lang: Lang }) {
               <HandoffLink
                 className="btn"
                 style={{ background: f.accent ?? undefined }}
-                href={f.join_url}
+                href={canonicalJoinUrl(f.slug, f.join_url)}
                 newTab
               >
                 {s("enterRoom", lang)}
