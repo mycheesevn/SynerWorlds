@@ -4,6 +4,7 @@ import "./globals.css";
 import { siteUrl } from "@/lib/data";
 import AuthBar from "@/components/AuthBar";
 import SynerLogo from "@/components/SynerLogo";
+import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -48,20 +49,7 @@ export default function RootLayout({
           </nav>
         </header>
         <main className="page">{children}</main>
-        <footer className="site-footer">
-          <p>
-            SynerWorlds · Một tài khoản, mọi bàn cờ —{" "}
-            <a href="https://pacclone.vercel.app">Cờ Tướng</a> ·{" "}
-            <a href="https://chess-my-cheese-vn.vercel.app">Cờ Vua</a> ·{" "}
-            <a href="https://cochieutuong-my-cheese-vn.vercel.app">
-              Cờ Chiếu Tướng
-            </a>{" "}
-            · <a href="https://coganh-my-cheese-vn.vercel.app">Cờ Gánh</a>
-            {" "}· <Link href="/privacy">Chính sách bảo mật</Link>
-            {" "}· <Link href="/terms">Điều khoản sử dụng</Link>
-            {" "}· <Link href="/contact">Liên hệ</Link>
-          </p>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );
